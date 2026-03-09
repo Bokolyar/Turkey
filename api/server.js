@@ -17,11 +17,10 @@ const PORT = 3001;
 // Middlewares
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '../server/uploads')));
+app.use('/uploads', express.static(path.join(process.cwd(), 'server/uploads')));
 
-// Data file path - Adjust for Vercel functions structure
-// If server/data.json is where the data resides
-const DATA_FILE = path.join(__dirname, '../server/data.json');
+// Data file path - Use process.cwd() for Vercel
+const DATA_FILE = path.join(process.cwd(), 'server/data.json');
 
 // Mock simple token for local use
 const SECRET_TOKEN = 'admin-secret-token-2026';
@@ -29,7 +28,7 @@ const SECRET_TOKEN = 'admin-secret-token-2026';
 // Multer Storage config
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '../server/uploads'))
+        cb(null, path.join(process.cwd(), 'server/uploads'))
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
