@@ -7,6 +7,7 @@ import { ExpertPicksBlock } from '../components/ExpertPicksBlock';
 import { TrustBlock } from '../components/TrustBlock';
 import { SocialProofBlock } from '../components/SocialProofBlock';
 import { FAQBlock } from '../components/FAQBlock';
+
 export function LandingPage() {
     const [data, setData] = useState(null);
     const { scrollYProgress } = useScroll();
@@ -18,19 +19,36 @@ export function LandingPage() {
 
     useEffect(() => {
         // Use relative path for Vercel/Local compatibility
+        // Local: proxied via vite.config.js
+        // Vercel: handled via rewrites in vercel.json
         fetch('/api/content')
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                return res.json();
+            })
             .then(json => {
                 if (json.success) setData(json.data);
             })
-            .catch(err => console.error("Failed to fetch landing data", err));
+            .catch(err => console.error("Failed to fetch landing data:", err));
     }, []);
 
     const scrollToQuiz = () => {
-        document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth' });
+        const element = document.getElementById('quiz');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
-    if (!data) return <div className="min-h-screen flex items-center justify-center text-slate-500">Загрузка данных сайта...</div>;
+    if (!data) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-slate-500 bg-white">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p>Загрузка данных сайта...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="font-sans antialiased text-slate-900 bg-white">
