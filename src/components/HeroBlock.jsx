@@ -19,13 +19,15 @@ export function HeroBlock({ onQuizClick }) {
 
     // Move the image downwards as we scroll down to create parallax
     const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+    // Also scale the image slightly as we scroll down
+    const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.25]);
 
     return (
         <section ref={ref} className="relative h-[100svh] flex items-center pt-4 pb-4 overflow-hidden">
             {/* Background Image & Overlay */}
             <div className="absolute inset-0 z-0 tracking-tighter">
                 <motion.img
-                    style={{ y }}
+                    style={{ y, scale }}
                     src={heroBg}
                     alt="Счастливая семья на отдыхе в отеле Турции с песчаным пляжем и соснами"
                     className="w-full h-full object-cover object-center scale-110"
