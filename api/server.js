@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import fs from 'fs';
-import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 import multer from 'multer';
-import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,41 +12,23 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+
+// Supabase Setup
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(process.cwd(), 'server/uploads')));
-
-// Data file path - Use process.cwd() for Vercel
-const DATA_FILE = path.join(process.cwd(), 'server/data.json');
 
 // Mock simple token for local use
 const SECRET_TOKEN = 'admin-secret-token-2026';
 
-// Multer Storage config
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(process.cwd(), 'server/uploads'))
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, uniqueSuffix + path.extname(file.originalname))
-    }
-});
+// Multer Storage config (temporary local storage before Supabase upload)
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
-// Helper to read data
-function readData() {
-    const data = fs.readFileSync(DATA_FILE, 'utf8');
-    return JSON.parse(data);
-}
-
-// Helper to write data
-function writeData(data) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
 
 // --- Endpoints ---
 
@@ -71,36 +53,80 @@ const requireAuth = (req, res, next) => {
     }
 };
 
-// Get Content
-app.get('/api/content', (req, res) => {
+// Get Content from Supabase
+app.get('/api/content', async (req, res) => {
     try {
-        const data = readData();
-        res.json({ success: true, data });
+        const { data, error } = await supabase
+            .from('settings')
+            .select('content')
+            .eq('key', 'landing_page')
+            .single();
+
+        if (error) throw error;
+        res.json({ success: true, data: data.content });
     } catch (error) {
-        console.error('API /content Error:', error);
-        res.status(500).json({ success: false, message: 'Failed to read data' });
+        console.error(' Supabase Fetch Error:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch content from Supabase' });
     }
 });
 
-// Update Content
-app.post('/api/content', requireAuth, (req, res) => {
+// Update Content in Supabase
+app.post('/api/content', requireAuth, async (req, res) => {
     try {
         const newContent = req.body;
-        // WARNING: This will fail on Vercel as it's read-only
-        writeData(newContent);
-        res.json({ success: true, message: 'Content updated successfully (Note: Changes won\'t persist on Vercel restart)' });
+        const { error } = await supabase
+            .from('settings')
+            .upsert({ key: 'landing_page', content: newContent }, { onConflict: 'key' });
+
+        if (error) throw error;
+        res.json({ success: true, message: 'Content updated successfully in Supabase' });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to save data. Note: Vercel storage is read-only.' });
+        console.error(' Supabase Update Error:', error);
+        res.status(500).json({ success: false, message: 'Failed to update content in Supabase' });
     }
 });
 
-// Upload image
-app.post('/api/upload', requireAuth, upload.single('image'), (req, res) => {
+// Upload image to Supabase Storage
+app.post('/api/upload', requireAuth, upload.single('image'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ success: false, message: 'No file uploaded' });
     }
-    // Return the filename so the frontend can save it in the JSON config
-    res.json({ success: true, filename: req.file.filename });
+
+    try {
+        const file = req.file;
+        const fileExt = path.extname(file.originalname);
+        const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExt}`;
+        const filePath = `${fileName}`;
+
+        // Upload to Supabase Bucket 'uploads' (Make sure to create this bucket in Supabase)
+        const { data, error } = await supabase.storage
+            .from('uploads')
+            .upload(filePath, file.buffer, {
+                contentType: file.mimetype,
+                upsert: true
+            });
+
+        if (error) {
+            // Check if bucket doesn't exist
+            if (error.message.includes('bucket not found') || error.error === 'Bucket not found') {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Supabase Storage Bucket "uploads" not found. Please create a public bucket named "uploads" in Supabase Storage.'
+                });
+            }
+            throw error;
+        }
+
+        // Get Public URL
+        const { data: { publicUrl } } = supabase.storage
+            .from('uploads')
+            .getPublicUrl(filePath);
+
+        res.json({ success: true, filename: publicUrl });
+    } catch (error) {
+        console.error(' Supabase Storage Error:', error);
+        res.status(500).json({ success: false, message: 'Failed to upload image to Supabase Storage' });
+    }
 });
 
 // Start server ONLY in local development
