@@ -1,5 +1,12 @@
+import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-
+import { HeroBlock } from '../components/HeroBlock';
+import { QuizBlock } from '../components/QuizBlock';
+import { ComparisonBlock } from '../components/ComparisonBlock';
+import { ExpertPicksBlock } from '../components/ExpertPicksBlock';
+import { TrustBlock } from '../components/TrustBlock';
+import { SocialProofBlock } from '../components/SocialProofBlock';
+import { FAQBlock } from '../components/FAQBlock';
 export function LandingPage() {
     const [data, setData] = useState(null);
     const { scrollYProgress } = useScroll();
