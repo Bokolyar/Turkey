@@ -226,12 +226,184 @@ export function AdminPanel() {
                             return null;
                         })}
 
-                        {/* Arrays like triggers or complex structures could be mapped here for deeper editing if desired. Displaying a read-only message for now to keep scope sane, or implement full JSON edit. */}
-                        {(currentBlockData.triggers || currentBlockData.hotels || currentBlockData.experts) && (
-                            <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
-                                <p className="text-amber-800 text-sm font-medium">Для редактирования списков (отели, эксперты, триггеры) в этой версии UI, пожалуйста, редактируйте текст напрямую. (Здесь можно расширить UI в будущем).</p>
+                        {/* Array: Triggers */}
+                        {currentBlockData.triggers && (
+                            <div className="space-y-4 pt-4 border-t">
+                                <h3 className="font-bold text-slate-800 uppercase tracking-wide flex items-center">
+                                    Триггеры (Преимущества)
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {currentBlockData.triggers.map((trigger, idx) => (
+                                        <div key={idx} className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                            <label className="block text-xs font-bold text-slate-500 mb-2">ТЕКСТ #{idx + 1}</label>
+                                            <input
+                                                type="text"
+                                                value={trigger.text}
+                                                onChange={e => {
+                                                    const newTriggers = [...currentBlockData.triggers];
+                                                    newTriggers[idx] = { ...trigger, text: e.target.value };
+                                                    updateField('triggers', newTriggers);
+                                                }}
+                                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
+
+                        {/* Array: Hotels */}
+                        {currentBlockData.hotels && (
+                            <div className="space-y-6 pt-4 border-t">
+                                <h3 className="font-bold text-slate-800 uppercase tracking-wide">Рекомендуемые отели</h3>
+                                <div className="space-y-6">
+                                    {currentBlockData.hotels.map((hotel, idx) => (
+                                        <div key={idx} className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Название</label>
+                                                    <input
+                                                        type="text"
+                                                        value={hotel.name}
+                                                        onChange={e => {
+                                                            const newHotels = [...currentBlockData.hotels];
+                                                            newHotels[idx] = { ...hotel, name: e.target.value };
+                                                            updateField('hotels', newHotels);
+                                                        }}
+                                                        className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Категория</label>
+                                                    <input
+                                                        type="text"
+                                                        value={hotel.category}
+                                                        onChange={e => {
+                                                            const newHotels = [...currentBlockData.hotels];
+                                                            newHotels[idx] = { ...hotel, category: e.target.value };
+                                                            updateField('hotels', newHotels);
+                                                        }}
+                                                        className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Фотография</label>
+                                                <div className="flex items-center space-x-4">
+                                                    <div className="w-32 h-20 rounded bg-slate-100 border overflow-hidden">
+                                                        <img
+                                                            src={hotel.image?.startsWith('http') ? hotel.image : `/api/uploads/${hotel.image}`}
+                                                            className="w-full h-full object-cover"
+                                                            alt="Preview"
+                                                        />
+                                                    </div>
+                                                    <label className="cursor-pointer bg-white hover:bg-slate-100 text-slate-700 px-4 py-2 rounded-lg flex items-center space-x-2 font-medium border border-slate-300 shadow-sm transition-colors text-sm">
+                                                        <ImageIcon className="w-4 h-4" />
+                                                        <span>Сменить фото</span>
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            className="hidden"
+                                                            onChange={(e) => {
+                                                                if (e.target.files[0]) {
+                                                                    handleImageUpload(e.target.files[0], (filename) => {
+                                                                        const newHotels = [...currentBlockData.hotels];
+                                                                        newHotels[idx] = { ...hotel, image: filename };
+                                                                        updateField('hotels', newHotels);
+                                                                    });
+                                                                }
+                                                            }}
+                                                        />
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Цитата</label>
+                                                <textarea
+                                                    value={hotel.quote}
+                                                    onChange={e => {
+                                                        const newHotels = [...currentBlockData.hotels];
+                                                        newHotels[idx] = { ...hotel, quote: e.target.value };
+                                                        updateField('hotels', newHotels);
+                                                    }}
+                                                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                                                    rows={2}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Array: Experts */}
+                        {currentBlockData.experts && (
+                            <div className="space-y-6 pt-4 border-t">
+                                <h3 className="font-bold text-slate-800 uppercase tracking-wide">Наши эксперты</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {currentBlockData.experts.map((expert, idx) => (
+                                        <div key={idx} className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
+                                            <div className="flex items-center space-x-4 mb-2">
+                                                <div className="w-20 h-20 rounded-full bg-slate-100 border overflow-hidden flex-shrink-0">
+                                                    <img
+                                                        src={expert.image?.startsWith('http') ? expert.image : `/api/uploads/${expert.image}`}
+                                                        className="w-full h-full object-cover"
+                                                        alt="Expert"
+                                                    />
+                                                </div>
+                                                <label className="cursor-pointer bg-white hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg flex items-center space-x-2 font-medium border border-slate-300 shadow-sm transition-colors text-xs">
+                                                    <ImageIcon className="w-3 h-3" />
+                                                    <span>Фото</span>
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        className="hidden"
+                                                        onChange={(e) => {
+                                                            if (e.target.files[0]) {
+                                                                handleImageUpload(e.target.files[0], (filename) => {
+                                                                    const newExperts = [...currentBlockData.experts];
+                                                                    newExperts[idx] = { ...expert, image: filename };
+                                                                    updateField('experts', newExperts);
+                                                                });
+                                                            }
+                                                        }}
+                                                    />
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Имя</label>
+                                                <input
+                                                    type="text"
+                                                    value={expert.name}
+                                                    onChange={e => {
+                                                        const newExperts = [...currentBlockData.experts];
+                                                        newExperts[idx] = { ...expert, name: e.target.value };
+                                                        updateField('experts', newExperts);
+                                                    }}
+                                                    className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Роль</label>
+                                                <input
+                                                    type="text"
+                                                    value={expert.role}
+                                                    onChange={e => {
+                                                        const newExperts = [...currentBlockData.experts];
+                                                        newExperts[idx] = { ...expert, role: e.target.value };
+                                                        updateField('experts', newExperts);
+                                                    }}
+                                                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                     </div>
                 </div>
             </div>

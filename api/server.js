@@ -135,8 +135,11 @@ app.post('/api/upload', requireAuth, upload.single('image'), async (req, res) =>
 
 // Start server ONLY in local development
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-    app.listen(PORT, '0.0.0.0', () => {
+    const server = app.listen(PORT, '0.0.0.0', () => {
         console.log(`Backend server running on http://localhost:${PORT}`);
+    });
+    server.on('error', (err) => {
+        console.error('SERVER ERROR:', err);
     });
 }
 
