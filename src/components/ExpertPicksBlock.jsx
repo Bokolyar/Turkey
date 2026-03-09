@@ -110,7 +110,7 @@ export function ExpertPicksBlock({ data, onQuoteClick }) {
 
                 <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl shadow-sm text-center max-w-4xl mx-auto">
                     <p className="text-slate-600 leading-relaxed">
-                        <span className="font-bold text-slate-800">Важно:</span> Это лишь примеры из нашей базы в 150+ отелей. В итоговую подборку для вас мы включим только те варианты, которые свободны на ваши даты и на 100% подходят под возраст ваших детей и ваши пожелания.
+                        <span className="font-bold text-slate-800">Важно:</span> Это лишь примеры из нашей базы в 150+ отелей. В итоговую подборку для вас мы включим только те варианты, которые свободны на ваши даты и на 100% подходят под возраст ваших детей и ваши привычки в отдыхе.
                     </p>
                 </div>
             </div>

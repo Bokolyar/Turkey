@@ -25,6 +25,17 @@ export function AdminPanel() {
             const json = await res.json();
             if (json.success) {
                 setData(json.data);
+                // If HeroBlock is not available or we want to default to the first sorted block:
+                const availableBlocks = Object.keys(json.data).sort((a, b) => {
+                    if (a === 'GlobalSettings') return -1;
+                    if (b === 'GlobalSettings') return 1;
+                    if (a === 'HeroBlock') return -1;
+                    if (b === 'HeroBlock') return 1;
+                    return 0;
+                });
+                if (availableBlocks.length > 0 && !json.data[activeTab]) {
+                    setActiveTab(availableBlocks[0]);
+                }
             }
         } catch (err) {
             console.error('Failed to fetch data', err);
