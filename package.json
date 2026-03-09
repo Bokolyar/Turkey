@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "node server/server.js",
+    "admin": "concurrently \"npm run dev\" \"npm run server\""
   },
   "dependencies": {
     "clsx": "^2.1.1",
