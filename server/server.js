@@ -77,6 +77,7 @@ app.get('/api/content', (req, res) => {
         const data = readData();
         res.json({ success: true, data });
     } catch (error) {
+        console.error('API /content Error:', error);
         res.status(500).json({ success: false, message: 'Failed to read data' });
     }
 });

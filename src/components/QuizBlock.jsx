@@ -51,7 +51,7 @@ const QUESTIONS = [
     }
 ];
 
-export function QuizBlock() {
+export function QuizBlock({ data }) {
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState({});
     const [familyData, setFamilyData] = useState({ adults: 2, children: 1, childrenAges: [5] });
