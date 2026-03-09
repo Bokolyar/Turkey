@@ -34,7 +34,7 @@ export function HeroBlock({ data, onQuizClick }) {
             <div className="absolute inset-0 z-0 tracking-tighter">
                 <motion.img
                     style={{ y, scale }}
-                    src={data?.bgImage?.includes('.') ? `http://localhost:3001/uploads/${data.bgImage}` : `/assets/${data?.bgImage || 'hero_family_resort.png'}`}
+                    src={data?.bgImage?.startsWith('http') ? data.bgImage : (data?.bgImage?.includes('.') ? `/uploads/${data.bgImage}` : `/assets/${data?.bgImage || 'hero_family_resort.png'}`)}
                     alt="Hero Resort"
                     className="w-full h-full object-cover object-center scale-110"
                 />

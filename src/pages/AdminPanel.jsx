@@ -21,7 +21,7 @@ export function AdminPanel() {
 
     const fetchData = async () => {
         try {
-            const res = await fetch('http://localhost:3001/api/content');
+            const res = await fetch('/api/content');
             const json = await res.json();
             if (json.success) {
                 setData(json.data);
@@ -36,7 +36,7 @@ export function AdminPanel() {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const res = await fetch('http://localhost:3001/api/content', {
+            const res = await fetch('/api/content', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export function AdminPanel() {
         const formData = new FormData();
         formData.append('image', file);
         try {
-            const res = await fetch('http://localhost:3001/api/upload', {
+            const res = await fetch('/api/upload', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body: formData
@@ -80,7 +80,13 @@ export function AdminPanel() {
     if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-sky-500" /></div>;
     if (!data) return <div className="p-8 text-center text-red-500">Failed to load data. Ensure backend is running.</div>;
 
-    const blocks = Object.keys(data);
+    const blocks = Object.keys(data).sort((a, b) => {
+        if (a === 'GlobalSettings') return -1;
+        if (b === 'GlobalSettings') return 1;
+        if (a === 'HeroBlock') return -1;
+        if (b === 'HeroBlock') return 1;
+        return 0;
+    });
     const currentBlockData = data[activeTab];
 
     const updateField = (field, value) => {
@@ -166,7 +172,11 @@ export function AdminPanel() {
                                             <div className="flex items-center space-x-4">
                                                 {value && (
                                                     <div className="w-32 h-20 rounded bg-slate-100 border overflow-hidden">
-                                                        <img src={`http://localhost:3001/uploads/${value}`} className="w-full h-full object-cover" alt="Preview" />
+                                                        <img
+                                                            src={value.startsWith('http') ? value : `/uploads/${value}`}
+                                                            className="w-full h-full object-cover"
+                                                            alt="Preview"
+                                                        />
                                                     </div>
                                                 )}
                                                 <label className="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg flex items-center space-x-2 font-medium border border-slate-300">

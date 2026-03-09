@@ -53,10 +53,16 @@ export function LandingPage() {
     return (
         <div className="font-sans antialiased text-slate-900 bg-white">
             {/* Scroll Progress Bar */}
-            <motion.div
-                className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-teal-500 via-emerald-500 to-teal-600 origin-left z-[9999]"
-                style={{ scaleX }}
-            />
+            {data.GlobalSettings?.visible !== false && (
+                <motion.div
+                    className="fixed top-0 left-0 right-0 z-[9999] origin-left"
+                    style={{
+                        scaleX,
+                        background: data.GlobalSettings?.scrollProgressColor || 'linear-gradient(to right, #14b8a6, #10b981, #0d9488)',
+                        height: data.GlobalSettings?.scrollProgressHeight || '6px'
+                    }}
+                />
+            )}
 
             {data.HeroBlock?.visible && <HeroBlock data={data.HeroBlock} onQuizClick={scrollToQuiz} />}
             {data.QuizBlock?.visible && <QuizBlock data={data.QuizBlock} />}
