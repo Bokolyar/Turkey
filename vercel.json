@@ -1,12 +1,11 @@
 {
-    "version": 2,
     "rewrites": [
         {
-            "source": "/api/:path*",
+            "source": "/api/(.*)",
             "destination": "/api/server.js"
         },
         {
-            "source": "/((?!api/).*)",
+            "source": "/(.*)",
             "destination": "/index.html"
         }
     ]
