@@ -1,15 +1,21 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ShieldCheck, Percent, ThumbsUp, Baby } from 'lucide-react';
-import heroBg from '../assets/hero_family_resort.png';
 
-export function HeroBlock({ onQuizClick }) {
-    const triggers = [
-        { icon: <ShieldCheck className="w-5 h-5 text-sky-500" />, text: "Гарантия цены: Платите за реальное качество, а не за бренд." },
-        { icon: <Percent className="w-5 h-5 text-sky-500" />, text: "Скидка: Раннее бронирование: выгода до 45%." },
-        { icon: <ThumbsUp className="w-5 h-5 text-sky-500" />, text: "Надежность: Только проверенные туроператоры." },
-        { icon: <Baby className="w-5 h-5 text-sky-500" />, text: "Акция: \"дети до 12 лет отдыхают бесплатно\"" },
+export function HeroBlock({ data, onQuizClick }) {
+    // We use the triggers from the json data. 
+    // Data has { text: "" }, but we need icons mapped by hand since they are static shapes for now.
+    const iconsMap = [
+        <ShieldCheck className="w-5 h-5 text-sky-500" />,
+        <Percent className="w-5 h-5 text-sky-500" />,
+        <ThumbsUp className="w-5 h-5 text-sky-500" />,
+        <Baby className="w-5 h-5 text-sky-500" />
     ];
+
+    const triggers = data?.triggers?.map((t, i) => ({
+        icon: iconsMap[i % iconsMap.length],
+        text: t.text
+    })) || [];
 
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
@@ -28,8 +34,8 @@ export function HeroBlock({ onQuizClick }) {
             <div className="absolute inset-0 z-0 tracking-tighter">
                 <motion.img
                     style={{ y, scale }}
-                    src={heroBg}
-                    alt="Счастливая семья на отдыхе в отеле Турции с песчаным пляжем и соснами"
+                    src={data?.bgImage?.includes('.') ? `http://localhost:3001/uploads/${data.bgImage}` : `/assets/${data?.bgImage || 'hero_family_resort.png'}`}
+                    alt="Hero Resort"
                     className="w-full h-full object-cover object-center scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-transparent"></div>
@@ -43,15 +49,13 @@ export function HeroBlock({ onQuizClick }) {
                         transition={{ duration: 0.6 }}
                     >
                         <p className="text-sky-400 font-semibold tracking-wide uppercase text-xs sm:text-sm mb-2">
-                            Специализируемся на семейном отдыхе в Турции с 2012 года
+                            {data?.subtitle}
                         </p>
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-3 tracking-tight">
-                            Турция 2026: Отели с безупречным сервисом и детскими клубами, <span className="text-sky-400">проверенные нами лично</span>
+                            {data?.title}
                         </h1>
                         <p className="text-base md:text-lg text-slate-200 mb-5 leading-relaxed max-w-xl">
-                            Подберем идеальный вариант под ваш бюджет: с пологим песчаным входом,
-                            качественным меню и активностями для детей любого возраста. Без переплат
-                            за «картинку» — только реальное качество и безопасность.
+                            {data?.desc}
                         </p>
 
                         {/* CTA Button */}
@@ -63,10 +67,10 @@ export function HeroBlock({ onQuizClick }) {
                                 className="group relative inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-bold text-white bg-amber-500 rounded-full shadow-lg hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 overflow-hidden transition-colors"
                             >
                                 <div className="absolute inset-0 w-1/4 h-full bg-white/20 skew-x-12 group-hover:block transition-all ease-out duration-500 -translate-x-full group-hover:translate-x-full animate-[shimmer_2s_infinite]"></div>
-                                Получить подборку отелей для идеального отдыха
+                                {data?.buttonText}
                             </motion.button>
-                            <p className="mt-2 text-xs sm:text-sm text-slate-300 ml-4 border-l-2 border-sky-400 pl-3">
-                                Пройдите тест и получите чек-лист <br />«Что взять с собой в Турцию с детьми»
+                            <p className="mt-2 text-xs sm:text-sm text-slate-300 ml-4 border-l-2 border-sky-400 pl-3 whitespace-pre-line">
+                                {data?.subButtonText}
                             </p>
                         </div>
 

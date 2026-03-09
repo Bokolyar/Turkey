@@ -125,11 +125,11 @@ export function QuizBlock() {
             <div className="container max-w-4xl mx-auto px-4">
 
                 <div className="text-center mb-10">
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-                        Пройдите тест и получите <span className="text-sky-600">ТОП-5 отелей</span>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 whitespace-pre-wrap">
+                        {data?.title || 'Пройдите тест и получите ТОП-5 отелей'}
                     </h2>
-                    <p className="text-lg text-slate-600">
-                        Ответьте на 5 коротких вопросов, чтобы мы подобрали идеальные варианты для вашей семьи.
+                    <p className="text-lg text-slate-600 whitespace-pre-wrap">
+                        {data?.subtitle || 'Ответьте на 5 коротких вопросов, чтобы мы подобрали идеальные варианты для вашей семьи.'}
                     </p>
                 </div>
 

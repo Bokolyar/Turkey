@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { XCircle, CheckCircle } from 'lucide-react';
 
-export function ComparisonBlock() {
+export function ComparisonBlock({ data }) {
     const comparisonData = [
         {
             label: 'Дорога и трансфер',
@@ -44,9 +44,9 @@ export function ComparisonBlock() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight"
+                        className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight whitespace-pre-wrap"
                     >
-                        Не все All Inclusive <span className="text-sky-600 border-b-4 border-amber-400">одинаково полезны</span>
+                        {data?.title || 'Не все All Inclusive одинаково полезны'}
                     </motion.h2>
                     <p className="text-lg text-slate-600">
                         Мы не просто бронируем отель, мы проектируем ваш комфорт. Посмотрите, из чего складывается разница между «просто отпуском» и отдыхом, где продумана каждая деталь.
@@ -57,12 +57,12 @@ export function ComparisonBlock() {
                     {/* Table Header */}
                     <div className="grid grid-cols-1 md:grid-cols-3 bg-slate-50 border-b border-slate-200">
                         <div className="hidden md:block p-6"></div>
-                        <div className="p-6 text-center border-b md:border-b-0 md:border-r border-slate-200 bg-red-50/50">
-                            <h3 className="text-xl font-bold text-red-600 mb-2">Типовой отель<br /><span className="text-sm font-medium text-red-400">(Масс-маркет)</span></h3>
+                        <div className="p-6 text-center border-b md:border-b-0 md:border-r border-slate-200 bg-red-50/50 flex flex-col justify-center">
+                            <h3 className="text-xl font-bold text-red-600 whitespace-pre-wrap">{data?.col1Title || 'Масс-маркет 5*'}</h3>
                         </div>
-                        <div className="p-6 text-center bg-sky-50 shadow-inner relative overflow-hidden">
+                        <div className="p-6 text-center bg-sky-50 shadow-inner relative overflow-hidden flex flex-col justify-center">
                             <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-500 rounded-bl-full shadow-md z-0 flex items-start justify-end p-3 text-white">★</div>
-                            <h3 className="text-xl font-bold text-sky-700 relative z-10">Наш выбор<br /><span className="text-sm font-medium text-sky-500">Экспертный подход</span></h3>
+                            <h3 className="text-xl font-bold text-sky-700 relative z-10 whitespace-pre-wrap">{data?.col2Title || 'Наш экспертный выбор'}</h3>
                         </div>
                     </div>
 

@@ -1,27 +1,18 @@
 import React from 'react';
-import { HeroBlock } from './components/HeroBlock';
-import { QuizBlock } from './components/QuizBlock';
-import { ComparisonBlock } from './components/ComparisonBlock';
-import { ExpertPicksBlock } from './components/ExpertPicksBlock';
-import { TrustBlock } from './components/TrustBlock';
-import { SocialProofBlock } from './components/SocialProofBlock';
-import { FAQBlock } from './components/FAQBlock';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { LandingPage } from './pages/LandingPage';
+import { AdminLogin } from './pages/AdminLogin';
+import { AdminPanel } from './pages/AdminPanel';
 
 function App() {
-  const scrollToQuiz = () => {
-    document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <div className="font-sans antialiased text-slate-900 bg-white">
-      <HeroBlock onQuizClick={scrollToQuiz} />
-      <QuizBlock />
-      <ComparisonBlock />
-      <ExpertPicksBlock onQuoteClick={scrollToQuiz} />
-      <TrustBlock />
-      <SocialProofBlock />
-      <FAQBlock />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<AdminLogin />} />
+        <Route path="/admpanel" element={<AdminPanel />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
