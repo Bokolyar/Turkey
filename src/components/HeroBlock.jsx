@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ShieldCheck, Percent, ThumbsUp, Baby } from 'lucide-react';
 import heroBg from '../assets/hero_family_resort.png';
 
@@ -11,14 +11,24 @@ export function HeroBlock({ onQuizClick }) {
         { icon: <Baby className="w-5 h-5 text-sky-500" />, text: "Акция: \"дети до 12 лет отдыхают бесплатно\"" },
     ];
 
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start start", "end start"]
+    });
+
+    // Move the image downwards as we scroll down to create parallax
+    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
     return (
-        <section className="relative h-[100svh] flex items-center pt-4 pb-4 overflow-hidden">
+        <section ref={ref} className="relative h-[100svh] flex items-center pt-4 pb-4 overflow-hidden">
             {/* Background Image & Overlay */}
             <div className="absolute inset-0 z-0 tracking-tighter">
-                <img
+                <motion.img
+                    style={{ y }}
                     src={heroBg}
                     alt="Счастливая семья на отдыхе в отеле Турции с песчаным пляжем и соснами"
-                    className="w-full h-full object-cover object-center scale-105"
+                    className="w-full h-full object-cover object-center scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-transparent"></div>
             </div>
