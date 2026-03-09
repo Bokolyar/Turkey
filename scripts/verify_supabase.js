@@ -21,10 +21,23 @@ async function verifySettings() {
             .single();
 
         if (error) throw error;
-        console.log('--- SUPABASE CONTENT KEYS ---');
+
+        console.log('--- ADMIN TAB ORDER ---');
         console.log(Object.keys(data.content));
-        console.log('--- GLOBAL SETTINGS VALUES ---');
-        console.log(JSON.stringify(data.content.GlobalSettings, null, 2));
+
+        console.log('\n--- HERO BLOCK IMAGE ---');
+        console.log(data.content.HeroBlock.bgImage);
+
+        console.log('\n--- EXPERT PICKS HOTELS ---');
+        data.content.ExpertPicksBlock.hotels.forEach(h => {
+            console.log(`${h.name}: ${h.image}`);
+        });
+
+        console.log('\n--- TRUST BLOCK EXPERTS ---');
+        data.content.TrustBlock.experts.forEach(e => {
+            console.log(`${e.name}: ${e.image}`);
+        });
+
     } catch (err) {
         console.error('Verification failed:', err);
     }

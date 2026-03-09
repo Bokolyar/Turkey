@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
+import { CustomCursor } from '../components/CustomCursor';
+import { ThemeToggle } from '../components/ThemeToggle';
+import { SectionDivider } from '../components/SectionDivider';
 import { HeroBlock } from '../components/HeroBlock';
 import { QuizBlock } from '../components/QuizBlock';
 import { ComparisonBlock } from '../components/ComparisonBlock';
@@ -10,6 +13,8 @@ import { FAQBlock } from '../components/FAQBlock';
 
 export function LandingPage() {
     const [data, setData] = useState(null);
+    const [isDark, setIsDark] = useState(false);
+
     const { scrollYProgress } = useScroll();
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
@@ -18,9 +23,16 @@ export function LandingPage() {
     });
 
     useEffect(() => {
-        // Use relative path for Vercel/Local compatibility
-        // Local: proxied via vite.config.js
-        // Vercel: handled via rewrites in vercel.json
+        // Initialize theme from system or local storage if needed
+        const root = window.document.documentElement;
+        if (isDark) {
+            root.classList.add('dark');
+        } else {
+            root.classList.remove('dark');
+        }
+    }, [isDark]);
+
+    useEffect(() => {
         fetch('/api/content')
             .then(res => {
                 if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
@@ -50,8 +62,16 @@ export function LandingPage() {
         );
     }
 
+    const revealVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+    };
+
     return (
-        <div className="font-sans antialiased text-slate-900 bg-white">
+        <div className="font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)] selection:bg-teal-500/30">
+            <CustomCursor />
+            <ThemeToggle isDark={isDark} toggle={() => setIsDark(!isDark)} />
+
             {/* Scroll Progress Bar */}
             {data.GlobalSettings?.visible !== false && (
                 <motion.div
@@ -64,13 +84,78 @@ export function LandingPage() {
                 />
             )}
 
-            {data.HeroBlock?.visible && <HeroBlock data={data.HeroBlock} onQuizClick={scrollToQuiz} />}
-            {data.QuizBlock?.visible && <QuizBlock data={data.QuizBlock} />}
-            {data.ComparisonBlock?.visible && <ComparisonBlock data={data.ComparisonBlock} />}
-            {data.ExpertPicksBlock?.visible && <ExpertPicksBlock data={data.ExpertPicksBlock} onQuoteClick={scrollToQuiz} />}
-            {data.TrustBlock?.visible && <TrustBlock data={data.TrustBlock} />}
-            {data.SocialProofBlock?.visible && <SocialProofBlock data={data.SocialProofBlock} />}
-            {data.FAQBlock?.visible && <FAQBlock data={data.FAQBlock} />}
+            {data.HeroBlock?.visible && (
+                <HeroBlock data={data.HeroBlock} onQuizClick={scrollToQuiz} />
+            )}
+
+            {data.QuizBlock?.visible && (
+                <motion.section
+                    id="quiz"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={revealVariants}
+                >
+                    <SectionDivider color="#0f172a" className="bg-white dark:bg-[#0f172a]" />
+                    <QuizBlock data={data.QuizBlock} />
+                </motion.section>
+            )}
+
+            {data.ComparisonBlock?.visible && (
+                <motion.section
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={revealVariants}
+                >
+                    <ComparisonBlock data={data.ComparisonBlock} />
+                </motion.section>
+            )}
+
+            {data.ExpertPicksBlock?.visible && (
+                <motion.section
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={revealVariants}
+                >
+                    <SectionDivider variant="curve" color="#f8fafc" className="bg-white dark:bg-slate-800" />
+                    <ExpertPicksBlock data={data.ExpertPicksBlock} onQuoteClick={scrollToQuiz} />
+                </motion.section>
+            )}
+
+            {data.TrustBlock?.visible && (
+                <motion.section
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={revealVariants}
+                >
+                    <TrustBlock data={data.TrustBlock} />
+                </motion.section>
+            )}
+
+            {data.SocialProofBlock?.visible && (
+                <motion.section
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={revealVariants}
+                >
+                    <SocialProofBlock data={data.SocialProofBlock} />
+                </motion.section>
+            )}
+
+            {data.FAQBlock?.visible && (
+                <motion.section
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={revealVariants}
+                >
+                    <FAQBlock data={data.FAQBlock} />
+                </motion.section>
+            )}
         </div>
     );
 }

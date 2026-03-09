@@ -37,37 +37,37 @@ export function ComparisonBlock({ data }) {
     ];
 
     return (
-        <section className="py-24 bg-white relative overflow-hidden">
+        <section className="py-24 bg-[var(--color-bg)] relative overflow-hidden transition-colors duration-500">
             <div className="container max-w-6xl mx-auto px-4 relative z-10">
                 <div className="text-center mb-16 max-w-3xl mx-auto">
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight whitespace-pre-wrap"
+                        className="text-3xl md:text-5xl font-extrabold text-[var(--color-text)] mb-6 leading-tight whitespace-pre-wrap"
                     >
                         {data?.title || 'Не все All Inclusive одинаково полезны'}
                     </motion.h2>
-                    <p className="text-lg text-slate-600">
+                    <p className="text-lg text-[var(--color-text)] opacity-70">
                         Мы не просто бронируем отель, мы проектируем ваш комфорт. Посмотрите, из чего складывается разница между «просто отпуском» и отдыхом, где продумана каждая деталь.
                     </p>
                 </div>
 
-                <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+                <div className="bg-[var(--color-card-bg)] backdrop-blur-[var(--glass-blur)] rounded-3xl shadow-2xl border border-[var(--color-card-border)] overflow-hidden">
                     {/* Table Header */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 bg-slate-50 border-b border-slate-200">
+                    <div className="grid grid-cols-1 md:grid-cols-3 bg-white/5 border-b border-[var(--color-card-border)]">
                         <div className="hidden md:block p-6"></div>
-                        <div className="p-6 text-center border-b md:border-b-0 md:border-r border-slate-200 bg-red-50/50 flex flex-col justify-center">
-                            <h3 className="text-xl font-bold text-red-600 whitespace-pre-wrap">{data?.col1Title || 'Масс-маркет 5*'}</h3>
+                        <div className="p-6 text-center border-b md:border-b-0 md:border-r border-[var(--color-card-border)] bg-red-500/5 flex flex-col justify-center">
+                            <h3 className="text-xl font-bold text-red-500 whitespace-pre-wrap uppercase tracking-widest text-[10px] sm:text-lg">{data?.col1Title || 'Масс-маркет 5*'}</h3>
                         </div>
-                        <div className="p-6 text-center bg-sky-50 shadow-inner relative overflow-hidden flex flex-col justify-center">
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-500 rounded-bl-full shadow-md z-0 flex items-start justify-end p-3 text-white">★</div>
-                            <h3 className="text-xl font-bold text-sky-700 relative z-10 whitespace-pre-wrap">{data?.col2Title || 'Наш экспертный выбор'}</h3>
+                        <div className="p-6 text-center bg-teal-500/10 shadow-inner relative overflow-hidden flex flex-col justify-center">
+                            <div className="absolute top-0 right-0 w-12 h-12 bg-teal-500 rounded-bl-full shadow-md z-0 flex items-start justify-end p-2 text-white font-black">★</div>
+                            <h3 className="text-xl font-bold text-teal-600 dark:text-teal-400 relative z-10 whitespace-pre-wrap uppercase tracking-widest text-[10px] sm:text-lg">{data?.col2Title || 'Наш экспертный выбор'}</h3>
                         </div>
                     </div>
 
                     {/* Table Body */}
-                    <div className="divide-y divide-slate-100">
+                    <div className="divide-y divide-[var(--color-card-border)]">
                         {comparisonData.map((row, idx) => (
                             <motion.div
                                 initial={{ opacity: 0 }}
@@ -75,18 +75,18 @@ export function ComparisonBlock({ data }) {
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
                                 key={idx}
-                                className="grid grid-cols-1 md:grid-cols-3 hover:bg-slate-50/50 transition-colors"
+                                className="grid grid-cols-1 md:grid-cols-3 hover:bg-white/5 transition-colors group"
                             >
-                                <div className="p-6 md:p-8 flex items-center md:border-r border-slate-100">
-                                    <h4 className="text-lg font-bold text-slate-800">{row.label}</h4>
+                                <div className="p-6 md:p-8 flex items-center md:border-r border-[var(--color-card-border)] bg-white/5">
+                                    <h4 className="text-sm font-black text-[var(--color-text)] uppercase tracking-wider">{row.label}</h4>
                                 </div>
-                                <div className="p-6 md:p-8 md:border-r border-slate-100 flex items-start space-x-4">
-                                    <XCircle className="w-6 h-6 text-red-400 flex-shrink-0 mt-0.5" />
-                                    <p className="text-slate-600 leading-relaxed">{row.mass}</p>
+                                <div className="p-6 md:p-8 md:border-r border-[var(--color-card-border)] flex items-start space-x-4">
+                                    <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                                    <p className="text-[var(--color-text)] opacity-60 text-sm leading-relaxed">{row.mass}</p>
                                 </div>
-                                <div className="p-6 md:p-8 flex items-start space-x-4 bg-sky-50/30">
-                                    <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
-                                    <p className="text-slate-800 font-medium leading-relaxed">{row.expert}</p>
+                                <div className="p-6 md:p-8 flex items-start space-x-4 bg-teal-500/5 group-hover:bg-teal-500/10 transition-colors">
+                                    <CheckCircle className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
+                                    <p className="text-[var(--color-text)] font-bold text-sm leading-relaxed">{row.expert}</p>
                                 </div>
                             </motion.div>
                         ))}
@@ -98,22 +98,24 @@ export function ComparisonBlock({ data }) {
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="bg-slate-50 rounded-2xl p-8 border border-slate-100"
+                        className="bg-[var(--color-card-bg)] backdrop-blur-[var(--glass-blur)] rounded-3xl p-8 border border-[var(--color-card-border)] shadow-xl relative overflow-hidden group"
                     >
-                        <h4 className="text-xl font-bold text-slate-800 mb-3 block border-l-4 border-amber-400 pl-4">Мы исключаем «случайные» варианты</h4>
-                        <p className="text-slate-600 leading-relaxed">
-                            За 12 лет работы мы сформировали базу отелей, которые не подводят. Мы не предлагаем варианты, где за красивым фасадом скрывается плохой сервис или антисанитария. Ваша безопасность и спокойствие — наш приоритет.
+                        <div className="absolute inset-0 bg-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <h4 className="text-xl font-black text-[var(--color-text)] mb-3 block border-l-4 border-red-500 pl-4 uppercase tracking-tighter">Случайные варианты исключены</h4>
+                        <p className="text-[var(--color-text)] opacity-70 text-sm leading-relaxed relative z-10">
+                            За 12 лет работы мы сформировали базу отелей, которые не подводят. Мы не предлагаем варианты, где за красивым фасадом скрывается плохой сервис или антисанитария.
                         </p>
                     </motion.div>
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="bg-sky-50 rounded-2xl p-8 border border-sky-100"
+                        className="bg-[var(--color-card-bg)] backdrop-blur-[var(--glass-blur)] rounded-3xl p-8 border border-[var(--color-card-border)] shadow-xl relative overflow-hidden group"
                     >
-                        <h4 className="text-xl font-bold text-sky-900 mb-3 block border-l-4 border-sky-500 pl-4">Отдых, где родители тоже отдыхают</h4>
-                        <p className="text-sky-800 leading-relaxed">
-                            Мы выбираем концепции (такие как Toucan и аналоги), где инфраструктура позволяет родителям расслабиться в Zen-зоне или заняться спортом, пока дети увлечены в клубе под присмотром профессионалов.
+                        <div className="absolute inset-0 bg-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <h4 className="text-xl font-black text-[var(--color-text)] mb-3 block border-l-4 border-teal-500 pl-4 uppercase tracking-tighter">Отдых для всей семьи</h4>
+                        <p className="text-[var(--color-text)] opacity-70 text-sm leading-relaxed relative z-10">
+                            Мы выбираем концепции, где инфраструктура позволяет родителям расслабиться в Zen-зоне или заняться спортом, пока дети увлечены в клубе.
                         </p>
                     </motion.div>
                 </div>

@@ -1,12 +1,29 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #0284c7; /* Sky 600 */
-  --color-primary-hover: #0369a1; /* Sky 700 */
-  --color-secondary: #f59e0b; /* Amber 500 */
-  --color-secondary-hover: #d97706; /* Amber 600 */
-  --color-dark: #1e293b; /* Slate 800 */
-  --color-light: #f8fafc; /* Slate 50 */
+:root {
+  --color-primary: #14b8a6;
+  /* Teal 500 */
+  --color-primary-hover: #0d9488;
+  /* Teal 600 */
+  --color-secondary: #f59e0b;
+  /* Amber 500 */
+  --color-secondary-hover: #d97706;
+  /* Amber 600 */
+  --color-bg: #ffffff;
+  --color-text: #0f172a;
+  /* Slate 900 */
+  --color-card-bg: rgba(255, 255, 255, 0.7);
+  --color-card-border: rgba(226, 232, 240, 0.8);
+  --glass-blur: 12px;
+}
+
+.dark {
+  --color-bg: #0f172a;
+  /* Slate 900 */
+  --color-text: #f8fafc;
+  /* Slate 50 */
+  --color-card-bg: rgba(30, 41, 59, 0.6);
+  --color-card-border: rgba(51, 65, 85, 0.5);
 }
 
 body {
@@ -16,6 +33,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-light);
-  color: var(--color-dark);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button,
+a,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"] {
+  cursor: pointer;
 }

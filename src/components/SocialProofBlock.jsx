@@ -35,65 +35,66 @@ export function SocialProofBlock() {
     ];
 
     return (
-        <section className="py-24 bg-slate-100 overflow-hidden">
+        <section className="py-24 bg-[var(--color-bg)] transition-colors duration-500 overflow-hidden">
             <div className="container max-w-6xl mx-auto px-4">
 
                 <div className="text-center mb-16 max-w-3xl mx-auto">
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight"
+                        className="text-3xl md:text-5xl font-black text-[var(--color-text)] mb-6 leading-tight"
                     >
-                        Истории идеального отпуска <span className="text-sky-600">от первого лица</span>
+                        Истории идеального отпуска <span className="text-teal-500">от первого лица</span>
                     </motion.h2>
-                    <p className="text-lg text-slate-600">
+                    <p className="text-lg text-[var(--color-text)] opacity-60">
                         За каждым отзывом стоит работа эксперта и счастливое лето одной семьи.
                     </p>
                 </div>
 
                 {/* Chat Bubbles */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
                     {reviews.map((rev, idx) => (
                         <motion.div
                             key={idx}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: idx * 0.15 }}
-                            className="bg-sky-50 p-4 md:p-6 rounded-3xl border border-sky-100 shadow-sm flex flex-col relative h-full"
+                            transition={{ delay: idx * 0.15, type: "spring" }}
+                            className="bg-[var(--color-card-bg)] backdrop-blur-[var(--glass-blur)] p-6 rounded-[2.5rem] border border-[var(--color-card-border)] shadow-xl flex flex-col relative h-full group hover:border-teal-500/30 transition-all"
                         >
                             {/* Chat Header */}
-                            <div className="flex items-center space-x-3 mb-4 border-b border-sky-100 pb-3">
-                                <div className="w-10 h-10 rounded-full bg-sky-200 flex items-center justify-center text-sky-700 font-bold flex-shrink-0">
+                            <div className="flex items-center space-x-3 mb-6 border-b border-[var(--color-card-border)] pb-4">
+                                <div className="w-10 h-10 rounded-full bg-teal-500/20 flex items-center justify-center text-teal-500 font-black flex-shrink-0 shadow-lg shadow-teal-500/5">
                                     {rev.name.charAt(0)}
                                 </div>
                                 <div>
-                                    <p className="font-bold text-slate-800 text-sm leading-tight">{rev.name}</p>
-                                    <p className="text-xs text-slate-500">онлайн</p>
+                                    <p className="font-black text-[var(--color-text)] text-sm leading-tight">{rev.name}</p>
+                                    <p className="text-[10px] text-teal-500 font-bold uppercase tracking-widest mt-1">онлайн</p>
                                 </div>
                                 <div className="ml-auto flex-shrink-0">
                                     {rev.app === 'whatsapp' ? (
-                                        <div className="bg-green-100 text-green-600 text-xs px-2 py-1 rounded-md font-bold flex items-center">WhatsApp</div>
+                                        <div className="bg-green-500/10 text-green-500 text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border border-green-500/20">WhatsApp</div>
                                     ) : (
-                                        <div className="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-md font-bold flex items-center">Telegram</div>
+                                        <div className="bg-blue-500/10 text-blue-500 text-[9px] px-2 py-1 rounded-lg font-black uppercase tracking-widest border border-blue-500/20">Telegram</div>
                                     )}
                                 </div>
                             </div>
 
                             {/* Chat Bubble Context (Hotel name) */}
-                            <div className="text-center mb-3">
-                                <span className="text-[10px] bg-slate-200 text-slate-600 px-3 py-1 rounded-full uppercase tracking-wider font-semibold">
+                            <div className="mb-4">
+                                <span className="text-[9px] bg-white/5 text-[var(--color-text)] px-3 py-1 rounded-full uppercase tracking-widest font-black border border-[var(--color-card-border)] opacity-60">
                                     Отель: {rev.hotel}
                                 </span>
                             </div>
 
                             {/* Message Bubble */}
-                            <div className={`relative ${rev.app === 'whatsapp' ? 'bg-[#dcf8c6]' : 'bg-white'} p-4 rounded-2xl rounded-tl-sm shadow-sm mb-2 text-sm text-slate-800 leading-relaxed`}>
-                                <p>{rev.text}</p>
-                                <div className="flex justify-end items-center mt-2 space-x-1">
-                                    <span className="text-[10px] text-slate-500">{rev.time}</span>
-                                    <CheckCheck className="w-3 h-3 text-sky-500" />
+                            <div className={`relative ${rev.app === 'whatsapp' ? 'bg-teal-500/10 border-teal-500/20' : 'bg-white/5 border-[var(--color-card-border)]'} p-5 rounded-[1.5rem] rounded-tl-none border shadow-sm mb-2 text-sm text-[var(--color-text)] leading-relaxed`}>
+                                <div className={`absolute -left-2 top-0 w-4 h-4 ${rev.app === 'whatsapp' ? 'bg-teal-500/10' : 'bg-white/5'} border-l border-t border-[var(--color-card-border)] rotate-[-45deg] hidden`}></div>
+                                <p className="font-medium opacity-90">{rev.text}</p>
+                                <div className="flex justify-end items-center mt-4 space-x-1">
+                                    <span className="text-[10px] text-[var(--color-text)] opacity-40 font-bold">{rev.time}</span>
+                                    <CheckCheck className="w-3.5 h-3.5 text-teal-500" />
                                 </div>
                             </div>
                         </motion.div>
@@ -101,14 +102,24 @@ export function SocialProofBlock() {
                 </div>
 
                 {/* Triggers Infographic */}
-                <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-100">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x-0 md:divide-x divide-y md:divide-y-0 divide-slate-100">
+                <div className="bg-[var(--color-card-bg)] backdrop-blur-[var(--glass-blur)] rounded-[3rem] p-8 md:p-12 shadow-2xl border border-[var(--color-card-border)] relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-teal-500/10 transition-colors"></div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x-0 md:divide-x divide-[var(--color-card-border)]">
                         {triggers.map((item, idx) => (
-                            <div key={idx} className="flex flex-col items-center text-center px-4 py-4 md:py-0">
-                                {item.icon}
-                                <div className="text-4xl font-extrabold text-slate-900 mb-2">{item.val}</div>
-                                <p className="text-sm text-slate-600 leading-snug">{item.text}</p>
-                            </div>
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="flex flex-col items-center text-center px-4 py-4 md:py-0"
+                            >
+                                <div className="w-12 h-12 bg-teal-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    {React.cloneElement(item.icon, { className: "w-6 h-6 text-teal-500" })}
+                                </div>
+                                <div className="text-4xl font-black text-[var(--color-text)] mb-2 tracking-tighter">{item.val}</div>
+                                <p className="text-xs text-[var(--color-text)] font-bold opacity-60 leading-snug uppercase tracking-widest">{item.text}</p>
+                            </motion.div>
                         ))}
                     </div>
                 </div>

@@ -17,27 +17,49 @@ export function HeroBlock({ data, onQuizClick }) {
         text: t.text
     })) || [];
 
+    const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
+
+    const handleMouseMove = (e) => {
+        const { clientX, clientY } = e;
+        const moveX = (clientX - window.innerWidth / 2) / 50;
+        const moveY = (clientY - window.innerHeight / 2) / 50;
+        setMousePos({ x: moveX, y: moveY });
+    };
+
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start start", "end start"]
     });
 
-    // Move the image downwards as we scroll down to create parallax
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-    // Also scale the image slightly as we scroll down
-    const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.25]);
+    // Scroll parallax
+    const scrollY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+    const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.2]);
 
     return (
-        <section ref={ref} className="relative h-[100svh] flex items-center pt-4 pb-4 overflow-hidden">
+        <section
+            ref={ref}
+            onMouseMove={handleMouseMove}
+            className="relative h-[100svh] flex items-center pt-4 pb-4 overflow-hidden"
+        >
             {/* Background Image & Overlay */}
-            <div className="absolute inset-0 z-0 tracking-tighter">
-                <motion.img
-                    style={{ y, scale }}
-                    src={data?.bgImage?.startsWith('http') ? data.bgImage : (data?.bgImage?.includes('.') ? `/api/uploads/${data.bgImage}` : `/assets/${data?.bgImage || 'hero_family_resort.png'}`)}
-                    alt="Hero Resort"
-                    className="w-full h-full object-cover object-center scale-110"
-                />
+            <div className="absolute inset-0 z-0 tracking-tighter overflow-hidden">
+                <motion.div
+                    style={{
+                        y: scrollY,
+                        scale,
+                        x: mousePos.x,
+                        y: mousePos.y
+                    }}
+                    transition={{ type: 'spring', damping: 20, stiffness: 100 }}
+                    className="absolute inset-0 w-full h-full"
+                >
+                    <img
+                        src={data?.bgImage?.startsWith('http') ? data.bgImage : (data?.bgImage?.includes('.') ? `/api/uploads/${data.bgImage}` : `/assets/${data?.bgImage || 'hero_family_resort.png'}`)}
+                        alt="Hero Resort"
+                        className="w-full h-full object-cover object-center scale-110"
+                    />
+                </motion.div>
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-transparent"></div>
             </div>
 
