@@ -39,7 +39,7 @@ export function ExpertPicksBlock({ data, onQuoteClick }) {
                         const imgSrc = hotel.image?.startsWith('http')
                             ? hotel.image
                             : (hotel.image?.includes('.')
-                                ? `/uploads/${hotel.image}`
+                                ? `/api/uploads/${hotel.image}`
                                 : fallbackImages[hotel.id] || fallbackImages.crystal);
 
                         return (

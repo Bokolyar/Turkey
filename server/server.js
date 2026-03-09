@@ -23,6 +23,10 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 app.use(cors());
 app.use(express.json());
 
+// Serve local uploads folder (fallback for old images)
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Mock simple token for local use
 const SECRET_TOKEN = 'admin-secret-token-2026';
 
@@ -130,8 +134,8 @@ app.post('/api/upload', requireAuth, upload.single('image'), async (req, res) =>
 });
 
 // Start server ONLY in local development
-if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-    app.listen(PORT, () => {
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(PORT, '0.0.0.0', () => {
         console.log(`Backend server running on http://localhost:${PORT}`);
     });
 }
