@@ -155,21 +155,21 @@ export function QuizBlock({ data }) {
 
     return (
         <section id="quiz" className="py-24 bg-[var(--color-bg)] transition-colors duration-500">
-            <div className="container max-w-4xl mx-auto px-4">
+            <div className="container mx-auto">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-black text-[var(--color-text)] mb-6 leading-tight">
+                    <h2 className="text-[var(--color-text)] mb-6">
                         {data?.title || 'Пройдите тест и получите ТОП-5 отелей'}
                     </h2>
-                    <p className="text-lg text-[var(--color-text)] opacity-70 max-w-2xl mx-auto">
+                    <p className="text-lg md:text-xl text-[var(--color-text)] opacity-70 max-w-2xl mx-auto font-medium">
                         {data?.subtitle || 'Ответьте на 5 коротких вопросов, чтобы мы подобрали идеальные варианты для вашей семьи.'}
                     </p>
                 </div>
 
-                <div className="bg-[var(--color-card-bg)] backdrop-blur-[var(--glass-blur)] rounded-[2.5rem] shadow-2xl overflow-hidden border border-[var(--color-card-border)] relative">
+                <div className="bg-[var(--color-card-bg)] backdrop-blur-[var(--glass-blur)] rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] overflow-hidden border border-[var(--color-card-border)] relative max-w-4xl mx-auto">
                     {!isFinished && (
                         <div className="bg-white/5 h-2 w-full">
                             <motion.div
-                                className="h-full bg-teal-500 shadow-[0_0_10px_rgba(20,184,166,0.5)]"
+                                className="h-full bg-teal-500 shadow-[0_0_15px_rgba(20,184,166,0.6)]"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${((step) / QUESTIONS.length) * 100}%` }}
                                 transition={{ duration: 0.5 }}
@@ -177,7 +177,7 @@ export function QuizBlock({ data }) {
                         </div>
                     )}
 
-                    <div className="p-8 md:p-16 min-h-[500px] flex flex-col justify-center">
+                    <div className="p-6 sm:p-10 md:p-16 min-h-[500px] flex flex-col justify-center">
                         <AnimatePresence mode="wait">
                             {!isFinished ? (
                                 <motion.div
@@ -187,11 +187,11 @@ export function QuizBlock({ data }) {
                                     exit={{ opacity: 0, x: -50 }}
                                     transition={{ type: "spring", damping: 20, stiffness: 100 }}
                                 >
-                                    <div className="bg-teal-500 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-block mb-4 shadow-lg shadow-teal-500/20">
+                                    <div className="bg-teal-500/10 text-teal-600 dark:text-teal-400 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] inline-block mb-6 border border-teal-500/20">
                                         Вопрос {step + 1} / {QUESTIONS.length}
                                     </div>
-                                    <h3 className="text-3xl font-black text-[var(--color-text)] mb-4 leading-tight">{currentQ.title}</h3>
-                                    {currentQ.subtitle && <p className="text-[var(--color-text)] opacity-60 mb-8 font-medium">{currentQ.subtitle}</p>}
+                                    <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-[var(--color-text)] mb-4 leading-tight">{currentQ.title}</h3>
+                                    {currentQ.subtitle && <p className="text-[var(--color-text)] text-sm sm:text-base opacity-60 mb-10 font-medium leading-relaxed">{currentQ.subtitle}</p>}
 
                                     {currentQ.type === 'custom_family' ? renderFamilyInput() : (
                                         <div className="grid grid-cols-1 gap-4 mt-8">
@@ -200,9 +200,9 @@ export function QuizBlock({ data }) {
                                                     key={opt.id}
                                                     onClick={() => handleOptionSelect(currentQ.id, opt.id)}
                                                     className={cn(
-                                                        "w-full text-left p-6 rounded-[1.5rem] border-2 transition-all flex items-center group relative overflow-hidden",
+                                                        "w-full text-left p-5 sm:p-6 rounded-2xl border-2 transition-all flex items-center group relative overflow-hidden",
                                                         answers[currentQ.id] === opt.id
-                                                            ? "border-teal-500 bg-teal-500/10"
+                                                            ? "border-teal-500 bg-teal-500/10 shadow-[0_10px_20px_-5px_rgba(20,184,166,0.2)]"
                                                             : "border-[var(--color-card-border)] bg-white/5 hover:border-teal-500/50 hover:bg-teal-500/5 font-bold"
                                                     )}
                                                 >
@@ -212,7 +212,7 @@ export function QuizBlock({ data }) {
                                                     )}>
                                                         {answers[currentQ.id] === opt.id && <div className="w-3 h-3 rounded-full bg-teal-500 shadow-[0_0_8px_rgba(20,184,166,0.8)]" />}
                                                     </div>
-                                                    <span className="text-[var(--color-text)] font-black text-sm sm:text-lg group-hover:translate-x-1 transition-transform">{opt.label}</span>
+                                                    <span className="text-[var(--color-text)] font-black text-sm sm:text-lg lg:text-xl group-hover:translate-x-1 transition-transform">{opt.label}</span>
                                                 </button>
                                             ))}
                                         </div>
@@ -225,10 +225,10 @@ export function QuizBlock({ data }) {
                                     animate={{ opacity: 1, scale: 1 }}
                                     className="text-center"
                                 >
-                                    <div ref={resultRef} className="bg-white p-10 rounded-[2rem] mb-10 border border-slate-100 text-left shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
+                                    <div ref={resultRef} className="bg-white p-6 sm:p-10 rounded-[2rem] mb-10 border border-slate-100 text-left shadow-[0_30px_60px_-12px_rgba(0,0,0,0.15)] overflow-hidden">
                                         <div className="flex items-center space-x-5 mb-10">
-                                            <div className="w-16 h-16 bg-teal-500 text-white rounded-[1.25rem] flex items-center justify-center shadow-xl">
-                                                <div className="font-black text-2xl">TJ</div>
+                                            <div className="w-16 h-16 bg-gradient-to-br from-teal-400 to-teal-600 text-white rounded-[1.25rem] flex items-center justify-center shadow-xl">
+                                                <div className="font-black text-2xl tracking-tighter">TJ</div>
                                             </div>
                                             <div>
                                                 <h4 className="text-xl font-black text-slate-900 uppercase tracking-tighter">Turkey Journey 2026</h4>
@@ -238,23 +238,23 @@ export function QuizBlock({ data }) {
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
                                             <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Состав группы</p>
-                                                <p className="font-black text-slate-800">{familyData.adults} взр + {familyData.children} дет ({familyData.childrenAges.join(', ')} л)</p>
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 font-black">Состав группы</p>
+                                                <p className="font-black text-slate-800 text-sm">{familyData.adults} взр + {familyData.children} дет ({familyData.childrenAges.join(', ')} л)</p>
                                             </div>
                                             {Object.entries(answers).map(([qId, optId]) => (
                                                 <div key={qId} className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
-                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 font-black">
                                                         {QUESTIONS.find(q => q.id === qId)?.id === 'month' ? 'Сезон отдыха' : QUESTIONS.find(q => q.id === qId)?.id === 'budget' ? 'Бюджет' : 'Предпочтения'}
                                                     </p>
-                                                    <p className="font-black text-slate-800 truncate">{getAnswerLabel(qId, optId)}</p>
+                                                    <p className="font-black text-slate-800 text-sm truncate">{getAnswerLabel(qId, optId)}</p>
                                                 </div>
                                             ))}
                                         </div>
 
                                         <div className="bg-teal-500 p-8 rounded-[1.5rem] text-center text-white relative overflow-hidden">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-                                            <p className="text-[10px] font-black uppercase tracking-widest mb-3 opacity-80">Статус обработки</p>
-                                            <p className="text-xl font-black mb-6">Эксперт уже выбирает ТОП-5 отелей из 150+ доступных вариантов.</p>
+                                            <p className="text-[10px] font-black uppercase tracking-widest mb-3 opacity-80 font-black">Статус обработки</p>
+                                            <p className="text-lg sm:text-xl font-black mb-6 leading-tight">Эксперт уже выбирает ТОП-5 отелей из 150+ доступных вариантов.</p>
                                             <div className="flex items-center justify-center space-x-3">
                                                 <div className="w-2.5 h-2.5 bg-white rounded-full animate-pulse"></div>
                                                 <div className="w-2.5 h-2.5 bg-white rounded-full animate-pulse [animation-delay:0.2s]"></div>
@@ -263,33 +263,33 @@ export function QuizBlock({ data }) {
                                         </div>
                                     </div>
 
-                                    <h3 className="text-3xl font-black text-[var(--color-text)] mb-6">Вау! Отличный выбор! 🎉</h3>
+                                    <h3 className="text-2xl sm:text-3xl font-black text-[var(--color-text)] mb-8">Вау! Отличный выбор! 🎉</h3>
 
-                                    <div className="max-w-md mx-auto space-y-4">
+                                    <div className="max-w-xl mx-auto space-y-4">
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             <button
                                                 onClick={generatePdf}
                                                 disabled={isGeneratingPdf}
-                                                className="w-full py-5 rounded-2xl border-2 border-teal-500 text-teal-500 font-black text-sm uppercase tracking-widest hover:bg-teal-500 hover:text-white transition-all flex items-center justify-center shadow-lg shadow-teal-500/10 h-16"
+                                                className="w-full py-5 rounded-2xl border-2 border-teal-500 text-teal-500 font-bold text-sm uppercase tracking-widest hover:bg-teal-500 hover:text-white transition-all flex items-center justify-center shadow-lg shadow-teal-500/10 h-16"
                                             >
                                                 {isGeneratingPdf ? 'Сборка...' : 'Скачать PDF'}
                                             </button>
                                             <div className="relative h-16">
-                                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                                                <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
                                                 <input
                                                     type="tel"
                                                     placeholder="+7 (___) ___"
-                                                    className="w-full pl-12 pr-4 h-full bg-white/5 border-2 border-[var(--color-card-border)] rounded-2xl outline-none focus:border-teal-500 focus:bg-white/10 transition-all text-lg font-black"
+                                                    className="w-full pl-14 pr-4 h-full bg-white/5 border-2 border-[var(--color-card-border)] rounded-2xl outline-none focus:border-teal-500 focus:bg-white/10 transition-all text-lg font-black"
                                                     value={phone}
                                                     onChange={(e) => setPhone(e.target.value)}
                                                 />
                                             </div>
                                         </div>
-                                        <button className="w-full py-6 bg-teal-500 hover:bg-teal-400 text-white font-black rounded-2xl shadow-2xl shadow-teal-500/40 transition-all flex justify-center items-center text-xl uppercase tracking-widest group">
-                                            Получить подборку в WhatsApp
+                                        <button className="w-full py-6 bg-teal-500 hover:bg-teal-400 text-white font-black rounded-2xl shadow-[0_20px_50px_rgba(20,184,166,0.4)] transition-all flex justify-center items-center text-lg sm:text-xl uppercase tracking-[0.2em] group">
+                                            Получить в WhatsApp
                                             <ChevronRight className="w-6 h-6 ml-2 group-hover:translate-x-2 transition-transform" />
                                         </button>
-                                        <p className="text-xs text-[var(--color-text)] opacity-40 font-bold uppercase tracking-widest mt-6">
+                                        <p className="text-xs text-[var(--color-text)] opacity-50 font-black uppercase tracking-widest mt-8">
                                             Вашим запросом займется эксперт Дарья. Мы на связи с 2012 года.
                                         </p>
                                     </div>
@@ -299,16 +299,16 @@ export function QuizBlock({ data }) {
                     </div>
                 </div>
 
-                <div className="mt-12 flex justify-center">
+                <div className="mt-16 flex justify-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center space-x-4 bg-[var(--color-card-bg)] backdrop-blur-[var(--glass-blur)] px-8 py-4 rounded-full shadow-2xl border border-[var(--color-card-border)]"
+                        className="inline-flex items-center space-x-4 bg-[var(--color-card-bg)] backdrop-blur-[var(--glass-blur)] px-10 py-5 rounded-full shadow-2xl border border-[var(--color-card-border)]"
                     >
-                        <div className="bg-amber-400 p-2 rounded-xl">
+                        <div className="bg-amber-400 p-2.5 rounded-2xl">
                             <Gift className="w-6 h-6 text-amber-950" />
                         </div>
-                        <span className="text-sm font-black text-[var(--color-text)] uppercase tracking-widest">
+                        <span className="text-xs sm:text-sm font-black text-[var(--color-text)] uppercase tracking-[0.15em]">
                             Бонус: Чек-лист «Сборы в Турцию» бесплатно
                         </span>
                     </motion.div>

@@ -10,6 +10,8 @@ import { ExpertPicksBlock } from '../components/ExpertPicksBlock';
 import { TrustBlock } from '../components/TrustBlock';
 import { SocialProofBlock } from '../components/SocialProofBlock';
 import { FAQBlock } from '../components/FAQBlock';
+import { SeoHead } from '../components/SeoHead';
+import { MapBlock } from '../components/MapBlock';
 
 export function LandingPage() {
     const [data, setData] = useState(null);
@@ -69,6 +71,7 @@ export function LandingPage() {
 
     return (
         <div className="font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text)] selection:bg-teal-500/30">
+            <SeoHead data={data.GlobalSettings} />
             <CustomCursor />
             <ThemeToggle isDark={isDark} toggle={() => setIsDark(!isDark)} />
 
@@ -114,18 +117,19 @@ export function LandingPage() {
 
             {data.ExpertPicksBlock?.visible && (
                 <motion.section
+                    id="hotels"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
                     variants={revealVariants}
                 >
-                    <SectionDivider variant="curve" color="#f8fafc" className="bg-white dark:bg-slate-800" />
                     <ExpertPicksBlock data={data.ExpertPicksBlock} onQuoteClick={scrollToQuiz} />
                 </motion.section>
             )}
 
             {data.TrustBlock?.visible && (
                 <motion.section
+                    id="about"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
@@ -145,6 +149,16 @@ export function LandingPage() {
                     <SocialProofBlock data={data.SocialProofBlock} />
                 </motion.section>
             )}
+
+            <motion.section
+                id="map"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={revealVariants}
+            >
+                <MapBlock data={data.MapBlock} />
+            </motion.section>
 
             {data.FAQBlock?.visible && (
                 <motion.section
